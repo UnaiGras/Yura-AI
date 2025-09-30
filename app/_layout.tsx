@@ -6,7 +6,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
+import { MiniPlayer } from '@/components/audio/MiniPlayer';
 import { useColorScheme } from '@/components/useColorScheme';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext';
+import { PurchasesProvider } from '@/contexts/PurchasesContext';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -42,7 +46,15 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <AuthProvider>
+      <PurchasesProvider>
+        <AudioPlayerProvider>
+          <RootLayoutNav />
+        </AudioPlayerProvider>
+      </PurchasesProvider>
+    </AuthProvider>
+  );
 }
 
 function RootLayoutNav() {
@@ -51,9 +63,19 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="purchase"
+          options={{
+            presentation: 'modal',
+            title: 'Premium Access',
+          }}
+        />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
+      <MiniPlayer />
     </ThemeProvider>
   );
 }
