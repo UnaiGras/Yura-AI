@@ -1,6 +1,7 @@
+import { Audio, AVPlaybackStatus } from 'expo-av';
 import {
-  ReactNode,
   createContext,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -8,7 +9,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Audio, AVPlaybackStatus } from 'expo-av';
 
 export type AudioTrack = {
   id: string;
@@ -67,7 +67,7 @@ export function AudioPlayerProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    configureAudioMode();
+    //configureAudioMode();
 
     return () => {
       cancelled = true;

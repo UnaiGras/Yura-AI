@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getApp, getApps, initializeApp } from 'firebase/app';
-import { getAuth, getReactNativePersistence, initializeAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getFunctions } from 'firebase/functions';
+import { connectAuthEmulator, getAuth, getReactNativePersistence, initializeAuth } from 'firebase/auth';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 import { Platform } from 'react-native';
 
 const firebaseConfig = {
@@ -33,4 +33,13 @@ function createAuthInstance() {
 export const auth = createAuthInstance();
 export const db = getFirestore(app);
 export const functions = getFunctions(app);
+
+
+if (__DEV__) {
+  connectFunctionsEmulator(functions, '192.168.0.14', 5001);
+  connectFirestoreEmulator(db, '192.168.0.14', 8080);
+  connectAuthEmulator(auth, 'http://192.168.0.14:9099');
+}
+
+
 export { app };

@@ -1,0 +1,27 @@
+{
+  "id": "anxiety",
+  "title": "Anxiety Self-Reflection",
+  "description": "Explore current triggers, coping mechanisms, and support needs related to your anxiety.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "When do you notice anxious feelings arise most often?"
+    },
+    {
+      "id": "q2",
+      "prompt": "What physical signals let you know anxiety is building?"
+    },
+    {
+      "id": "q3",
+      "prompt": "Which coping strategies feel supportive in the moment?"
+    },
+    {
+      "id": "q4",
+      "prompt": "Who can you reach out to when you need reassurance or grounding?"
+    },
+    {
+      "id": "q5",
+      "prompt": "What is one small step you can take this week to nurture calm?"
+    }
+  ]
+}

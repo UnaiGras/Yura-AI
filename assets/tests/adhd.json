@@ -1,0 +1,27 @@
+{
+  "id": "adhd",
+  "title": "ADHD Daily Check-In",
+  "description": "Reflect on focus, energy, and organization patterns connected to ADHD (TDAH).",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which tasks felt most challenging to focus on recently?"
+    },
+    {
+      "id": "q2",
+      "prompt": "What strategies helped you redirect or sustain attention?"
+    },
+    {
+      "id": "q3",
+      "prompt": "How did your energy levels shift throughout the day?"
+    },
+    {
+      "id": "q4",
+      "prompt": "Where could extra structure or reminders support you this week?"
+    },
+    {
+      "id": "q5",
+      "prompt": "What is one win you want to recognize from today?"
+    }
+  ]
+}

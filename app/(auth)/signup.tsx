@@ -1,11 +1,12 @@
+import { Link, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
-import { Link, useRouter } from 'expo-router';
 
 import { Text } from '@/components/Themed';
 import { AuthButton } from '@/components/auth/AuthButton';
 import { AuthTextInput } from '@/components/auth/AuthTextInput';
 import { useAuth } from '@/hooks/useAuth';
+
 
 export default function SignupScreen() {
   const router = useRouter();
@@ -49,6 +50,7 @@ export default function SignupScreen() {
 
     try {
       await signUp(email, password);
+
       router.replace('/(tabs)/(main)');
     } catch (err) {
       setError(getFirebaseErrorMessage(err));

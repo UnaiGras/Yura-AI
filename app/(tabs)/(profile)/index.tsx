@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { usePurchases } from '@/hooks/usePurchases';
 
 export default function Profile() {
-  const { user, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const {
     isPremium,
     activeEntitlementIds,
@@ -43,11 +43,14 @@ export default function Profile() {
       <Text style={styles.title}>Profile</Text>
       {user ? (
         <>
+          {profile?.displayName ? (
+            <Text style={styles.subtitle}>{profile.displayName}</Text>
+          ) : null}
           <Text style={styles.subtitle}>Logged in as</Text>
-          <Text style={styles.email}>{user.email}</Text>
+          <Text style={styles.email}>{profile?.email ?? user.email}</Text>
           <View style={styles.premiumCard}>
             <Text style={styles.cardTitle}>Premium status</Text>
-            <Text style={styles.statusText}>{isPremium ? 'Premium unlocked' : 'Free tier'}</Text>
+            <Text style={styles.statusText}>{profile?.premium || isPremium ? 'Premium unlocked' : 'Free tier'}</Text>
             {activeEntitlementIds.length ? (
               <Text style={styles.entitlements}>Entitlements: {activeEntitlementIds.join(', ')}</Text>
             ) : null}

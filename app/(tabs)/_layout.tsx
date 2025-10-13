@@ -1,4 +1,3 @@
-import { Text, View } from '@/components/Themed';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import React from 'react';
@@ -31,13 +30,7 @@ export default function TabLayout() {
         options={{
           title: 'Main',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <View>
-              <Text>
-                Hello
-              </Text>
-            </View>
-          ),
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -45,6 +38,7 @@ export default function TabLayout() {
         options={{
           title: 'Tests',
           tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
