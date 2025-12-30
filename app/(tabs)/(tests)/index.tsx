@@ -1,11 +1,11 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    FlatList,
-    RefreshControl,
-    StyleSheet,
-    TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 
 import { Text, useThemeColor, View } from '@/components/Themed';

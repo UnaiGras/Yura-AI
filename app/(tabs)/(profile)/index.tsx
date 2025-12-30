@@ -1,128 +1,167 @@
-import { Alert, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
-
-import { Text, View } from '@/components/Themed';
-import { ThemedButton } from '@/components/ThemedButton';
-import { useAuth } from '@/hooks/useAuth';
-import { usePurchases } from '@/hooks/usePurchases';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Image, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import { View, Text } from '@/components/Themed';
+import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/components/useColorScheme';
 
 export default function Profile() {
-  const { user, profile, signOut } = useAuth();
-  const {
-    isPremium,
-    activeEntitlementIds,
-    restorePurchases,
-    isProcessingPurchase,
-    isInitializing,
-  } = usePurchases();
-  const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+  const themeColors = Colors[isDark ? 'dark' : 'light'];
+  // Fallback if pastelGreen isn't in light theme, though we are focusing on dark mode
+  const highlightColor = (themeColors as any).pastelGreen || '#D1F2D6';
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      Alert.alert('Sign out failed', 'Please try again.');
+  const menuGroups = [
+    {
+      title: 'Account',
+      items: [
+        { icon: 'person-outline', label: 'Account Details', subtitle: 'Manager your Account Details' },
+        { icon: 'card-outline', label: 'Payment History', subtitle: 'View your past orders' },
+        { icon: 'notifications-outline', label: 'Notification' },
+        { icon: 'settings-outline', label: 'Settings' },
+      ],
+    },
+    {
+      title: 'Support',
+      items: [
+        { icon: 'call-outline', label: 'Contact Us' },
+        { icon: 'document-text-outline', label: 'Teams & condition' },
+        { icon: 'shield-checkmark-outline', label: 'Privacy Policy' },
+        { icon: 'help-circle-outline', label: 'Get Help' },
+      ],
+    },
+    {
+      title: 'Actions',
+      items: [
+        { icon: 'log-out-outline', label: 'Log out', isDestructive: false }, // Kept neutral for now
+      ],
     }
-  };
-
-  const handleRestorePurchases = async () => {
-    try {
-      await restorePurchases();
-      Alert.alert('Purchases restored', 'Your premium access has been refreshed.');
-    } catch (error) {
-      Alert.alert('Restore failed', 'We could not restore purchases right now.');
-    }
-  };
-
-  const handleOpenPremium = () => {
-    router.push('/purchase');
-  };
+  ];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-      {user ? (
-        <>
-          {profile?.displayName ? (
-            <Text style={styles.subtitle}>{profile.displayName}</Text>
-          ) : null}
-          <Text style={styles.subtitle}>Logged in as</Text>
-          <Text style={styles.email}>{profile?.email ?? user.email}</Text>
-          <View style={styles.premiumCard}>
-            <Text style={styles.cardTitle}>Premium status</Text>
-            <Text style={styles.statusText}>{profile?.premium || isPremium ? 'Premium unlocked' : 'Free tier'}</Text>
-            {activeEntitlementIds.length ? (
-              <Text style={styles.entitlements}>Entitlements: {activeEntitlementIds.join(', ')}</Text>
-            ) : null}
-            <View style={styles.cardActions}>
-              <ThemedButton
-                title={isPremium ? 'Manage Subscription' : 'Upgrade to Premium'}
-                onPress={handleOpenPremium}
-                lightBackgroundColor={isPremium ? '#2e7d32' : undefined}
-                disabled={isInitializing}
-              />
-              <ThemedButton
-                title="Restore Purchases"
-                onPress={handleRestorePurchases}
-                disabled={isProcessingPurchase}
-              />
-            </View>
+    <ScrollView style={[styles.container, { backgroundColor: themeColors.background }]}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.userInfo}>
+          {/* Placeholder Avatar */}
+          <View style={[styles.avatarCmd, { backgroundColor: '#333' }]}>
+            <Image
+              source={{ uri: 'https://i.pravatar.cc/150?img=11' }}
+              style={styles.avatar}
+            />
           </View>
-          <ThemedButton title="Sign Out" onPress={handleSignOut} style={styles.button} />
-        </>
-      ) : (
-        <Text style={styles.subtitle}>You are not signed in.</Text>
-      )}
-    </View>
+          <View style={styles.userTexts}>
+            <Text style={styles.userName}>Mr.Jacob</Text>
+            <Text style={styles.userStatus}>Welcome to California</Text>
+          </View>
+        </View>
+        <TouchableOpacity style={[styles.editButton, { backgroundColor: '#333' }]}>
+          <Ionicons name="create-outline" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Grouped Lists */}
+      <View style={styles.content}>
+        {menuGroups.map((group, groupIndex) => (
+          <View key={groupIndex} style={styles.menuGroup}>
+            {group.items.map((item: any, index) => (
+              <TouchableOpacity key={index} style={styles.menuItem}>
+                <View style={styles.menuIconContainer}>
+                  <Ionicons name={item.icon} size={22} color={themeColors.text} />
+                </View>
+                <View style={styles.menuTextContainer}>
+                  <Text style={styles.menuLabel}>{item.label}</Text>
+                  {item.subtitle && <Text style={styles.menuSubtitle}>{item.subtitle}</Text>}
+                </View>
+                <Ionicons name="chevron-forward" size={20} color="#666" />
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 60, // approximate status bar space
+    paddingBottom: 30,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+  },
+  avatarCmd: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    overflow: 'hidden',
     justifyContent: 'center',
-    padding: 24,
+    alignItems: 'center',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  email: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 24,
-  },
-  button: {
+  avatar: {
     width: '100%',
+    height: '100%',
   },
-  premiumCard: {
-    width: '100%',
+  userTexts: {
+    justifyContent: 'center',
+  },
+  userName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  userStatus: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 2,
+  },
+  editButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    paddingHorizontal: 20,
+    gap: 20,
+  },
+  menuGroup: {
+    // No background on the group itself in the dark reference, 
+    // but items look cohesive. We can add a subtle background if needed.
+    // The reference seems to have a grouped background or just transparent.
+    // Let's assume transparent for "clean dark mode" unless requested otherwise.
     borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.1)',
-    gap: 12,
+    overflow: 'hidden',
   },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
   },
-  statusText: {
+  menuIconContainer: {
+    width: 40,
+    alignItems: 'flex-start',
+  },
+  menuTextContainer: {
+    flex: 1,
+  },
+  menuLabel: {
     fontSize: 16,
     fontWeight: '500',
   },
-  entitlements: {
-    fontSize: 14,
-    opacity: 0.7,
-  },
-  cardActions: {
-    gap: 12,
+  menuSubtitle: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 2,
   },
 });
